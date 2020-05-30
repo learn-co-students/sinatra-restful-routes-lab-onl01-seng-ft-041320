@@ -1,0 +1,8 @@
+<h1>The Ultimate Cook Book!</h1>
+
+<body>
+    <%Recipe.all.each do |recipe|%>
+        <h3><%=recipe.name%></h1>
+        <a href="/recipes/<%=recipe.id%>">Recipe Link</a>
+    <%end%>
+</body>
