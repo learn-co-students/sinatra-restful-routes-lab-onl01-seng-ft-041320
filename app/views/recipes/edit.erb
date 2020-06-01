@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Edit Recipe</title>
+    </head>
+    <body>
+        <h2>Edit Recipe</h2>
+        <form method="POST" action="/recipes/<%= @recipe.id %>/edit">
+            <input type="hidden" id="hidden" name="_method" value="patch">
+            <h3>Name:</h3>
+            <input type="text" name="name" id="name" value="<%= @recipe.name %>">
+            <h3>Ingredients:</h3>
+            <input type="text" name="ingredients" id="ingredients" value="<%= @recipe.ingredients %>">>
+            <h3>Cook Time:</h3>
+            <input type="text" name="cook_time" id="cook_time" value="<%= @recipe.cook_time %>">>
+            <input type="submit" name="submit" id="submit">
+        </form>
+    </body>
+</html>
