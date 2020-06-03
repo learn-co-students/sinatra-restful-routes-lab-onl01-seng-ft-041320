@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html>
-  <body>
-    <h1>Recipes Index</h1>
-    <% @recipes.each do |recipe| %>
-    <% recipe_link = "/recipes/#{recipe.id}" %>
-    <p><a href="<%= recipe_link %>"><%= recipe.name %></a></p>
-    <% end %>
-  </body>
-</html>
+<ul>
+<% @recipes.each do |recipe|%>
+  <li>
+    <a href="/recipes/<%= recipe.id %>">Name: <%= recipe.name %></a>
+    Ingredients: <%= recipe.ingredients %>
+    Cook time <%= recipe.cook_time %>
+  </li>
+<% end %>
+</ul>

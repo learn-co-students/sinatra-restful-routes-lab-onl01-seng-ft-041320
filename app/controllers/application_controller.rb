@@ -1,70 +1,51 @@
-require 'pry'
+require './config/environment'
 
 class ApplicationController < Sinatra::Base
+  # register Sinatra::ActiveRecordExtension
+  set :views, Proc.new { File.join(root, "../views/") }
+
   configure do
     set :public_folder, 'public'
     set :views, 'app/views'
   end
 
-  get '/' do
-      redirect '/recipes'
-    end
-
-#Index
- get '/recipes' do
-   @recipes = Recipe.all
-   erb :index
- end
-
- #create
- post '/recipes' do
-  Recipe.new(
-    name: params[:name],
-    ingredients: params[:ingredients],
-    cook_time: params[:cook_time]
-  ).tap do |recipe|
-    recipe.save
-    redirect "/recipes/#{recipe.id}"
-  end
-end
-
- #new
-  get '/recipes/new' do
+  get '/recipes/new' do #loads new form
     erb :new
   end
 
-  #Show
-    get '/recipes/:id' do
-      @recipe = Recipe.find_by(params[:id])
-      erb :show
-    end
+  get '/recipes' do #loads index page
+    @recipes = Recipe.all
+    erb :index
+  end
 
-#Edit
-  get '/recipes/:id/edit' do
-    @recipe = Recipe.find_by(params[:id])
+  get '/recipes/:id' do  #loads show page
+    @recipe = Recipe.find_by_id(params[:id])
+    erb :show
+  end
+
+  get '/recipes/:id/edit' do #loads edit form
+    @recipe = Recipe.find_by_id(params[:id])
     erb :edit
   end
 
-#Update
-patch '/recipes/:id' do
-  Recipe.find(params[:id]).tap do |recipe|
-    recipe.update(
-      name: params[:name],
-      ingredients: params[:ingredients],
-      cook_time: params[:cook_time]
-    )
-
-    redirect to "/recipes/#{recipe.id}"
-
-  end
+  patch '/recipes/:id' do  #updates a recipe
+    @recipe = Recipe.find_by_id(params[:id])
+    @recipe.name = params[:name]
+    @recipe.ingredients = params[:ingredients]
+    @recipe.cook_time = params[:cook_time]
+    @recipe.save
+    redirect to "/recipes/#{@recipe.id}"
   end
 
-#Destroy
-  delete '/recipes/:id' do
-    Recipe.find(params[:id]).destroy
-    redirect to "/recipes"
+  post '/recipes' do  #creates a recipe
+    @recipe = Recipe.create(params)
+    redirect to "/recipes/#{@recipe.id}"
   end
 
-
+  delete '/recipes/:id' do #destroy action
+    @recipe = Recipe.find_by_id(params[:id])
+    @recipe.delete
+    redirect to '/recipes'
+  end
 
 end
